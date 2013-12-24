@@ -22,7 +22,7 @@ func main() {
 	flag.Float64Var(&l1weight, "l1weight", 1.0, "coefficient of l1 regularizer (default is 1)")
 	flag.Float64Var(&l2weight, "l2weight", 0.0, "coefficient of l2 regularizer(default is 0)")
 	flag.IntVar(&m, "m", 10, "sets L-BFGS memory parameter (default is 10)")
-	flag.IntVar(&feature_num, "num", 0, "total feature count")
+	flag.IntVar(&feature_num, "num", 5, "total feature count")
 	flag.Float64Var(&tol, "tol", 0.0001, " sets convergence tolerance (default is 1e-4)")
 	flag.BoolVar(&quiet, "quiet", false, "Suppress all output information")
 	flag.StringVar(&feature_file, "input", "./testdata", "the path of input feature file")
