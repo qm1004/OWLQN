@@ -1,0 +1,11 @@
+solver_type L1R_LR
+nr_class 2
+label 1 0
+nr_feature 5
+bias -1
+w
+0 
+0.4431828062292427 
+0 
+-0.3106362646364158 
+1.104640662689694 
