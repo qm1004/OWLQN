@@ -1,13 +1,17 @@
 OWLQN
 =====
-#Introduction
-OWLQN is an optimization algorithm,which is called L1-LBFGS.
-OWLQN algorithm is proposed by paper "Orthant-Wise Limited-memory Quasi-Newton Optimizer for L1-regularized Objectives".
+OWLQN is an optimization algorithm,which is known as L1-LBFGS.
+OWLQN algorithm is first proposed by paper "Orthant-Wise Limited-memory Quasi-Newton Optimizer for L1-regularized Objectives" writen by .
+OWLQN make use of  pseudo-gradient to find f(x) partial derivative where x is not differentiable.
 
-This paper has provided a c++ source code running Windows.you can downlaod it at http://research.microsoft.com/en-us/downloads/b1eb1016-1738-4bd5-83a9-370c9d498a03/
+This paper has provided a c++ source code running on Windows.you can downlaod it at http://research.microsoft.com/en-us/downloads/b1eb1016-1738-4bd5-83a9-370c9d498a03/ .
 Most of my go code refer to c++ source code,but I think there is some little bug I fixed in go code.
 
+OWLQN can sovle L1-regression optimization problem.L1-regression is used for "ad ctr prediction“  in most company.
+
 #How to use
+This is a demo about  L1-regression optimization.
+
 ```go
 package main
 
@@ -28,7 +32,7 @@ func main() {
     var m int
     var tol float64
     var quiet bool
-    var feature_file string
+    var feature_file string  //input file:should have the same format as libsvm's input file
     var output_file string
     flag.Float64Var(&l1weight, "l1weight", 1.0, "coefficient of l1 regularizer (default is 1)")
     flag.Float64Var(&l2weight, "l2weight", 0.0, "coefficient of l2 regularizer(default is 0)")
@@ -41,8 +45,8 @@ func main() {
     flag.Parse()
     fmt.Println("feature_num:",feature_num,"  l1weight:",l1weight)
     
-    lr:= owlqn.NewLogisticRegression(feature_file, feature_num)
-    obj := owlqn.NewLogisticRegressionObjective(lr, float32(l2weight))
+    lr:= owlqn.NewLogisticRegression(feature_file, feature_num) //init a LogisticRegression object
+    obj := owlqn.NewLogisticRegressionObjective(lr, float32(l2weight)) 
     init := make([]float32, feature_num)
 
     for i := 0; i < len(init); i++ {
@@ -52,7 +56,7 @@ func main() {
     result := make([]float32, feature_num)
     opt := owlqn.NewOWLQN(quiet)
     fmt.Println("init:",init)
-    opt.Minimize(obj, init, result, float32(l1weight), float32(tol), m)
+    opt.Minimize(obj, init, result, float32(l1weight), float32(tol), m) //optimization fuction
 
     nonZero := 0
     for i := 0; i < feature_num; i++ {
@@ -74,11 +78,12 @@ func main() {
     br.WriteString("l1weight="+strconv.FormatFloat(float64(l1weight), 'f', 4, 32)+"\n")
     br.Flush()
     for i := 0; i < feature_num; i++ {
-        res := strconv.FormatFloat(float64(result[i]), 'f', 4, 32)
+        res := strconv.FormatFloat(float64(result[i]), 'f', 4, 32)    //write variable weight into output_file
         br.WriteString(res + "\n")
         br.Flush()
     }
 
 }
 ```
-
+#Todo
+GO is good at concurrence program.So I will write a concurrence OWLQN by go.
