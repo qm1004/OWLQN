@@ -8,6 +8,7 @@ This paper has provided a c++ source code running Windows.you can downlaod it at
 Most of my go code refer to c++ source code,but I think there is some little bug I fixed in go code.
 
 #How to use
+```go
 package main
 
 import (
@@ -79,5 +80,5 @@ func main() {
     }
 
 }
-
+```
 
