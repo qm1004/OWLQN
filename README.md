@@ -13,6 +13,8 @@ OWLQN can sovle L1 logstic regression optimization problem.L1 logstic regression
 #How to use
 This is a demo about  L1-regression optimization.
 
+you can execute test.go by "go run examples/test.go -num 5 -l1weight 1"
+
 ```go
 package main
 
