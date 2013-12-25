@@ -6,7 +6,6 @@ OWLQN algorithm is first proposed by paper "Orthant-Wise Limited-memory Quasi-Ne
 
 OWLQN make use of  pseudo-gradient to find f(x) partial derivative where x is not differentiable.
 
-This paper has provided a c++ source code running on Windows.you can downlaod it at http://research.microsoft.com/en-us/downloads/b1eb1016-1738-4bd5-83a9-370c9d498a03/ .
 
 OWLQN can sovle L1 logstic regression optimization problem.L1 logstic regression is used for "ad ctr prediction“  in most company.
 
