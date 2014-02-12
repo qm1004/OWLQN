@@ -98,9 +98,9 @@ func (lr *LogisticRegression) ScoreOf(i int, weights []float32) float32 {
 			os.Exit(1)
 		}
 	}
-	/*if !lr.labels[i] {
+	if !lr.labels[i] {
 		score *= -1
-	}*/
+	}
 	return score
 }
 
@@ -116,9 +116,9 @@ func (lr *LogisticRegression) AddInstance(inds []int, vals []float32, label bool
 	lr.labels = append(lr.labels, label)
 }
 func (lr *LogisticRegression) AddMultTo(i int, mult float32, vec[]float32) {
-	/*if lr.labels[i] {
+	if lr.labels[i] {
 		mult *= -1
-	}*/
+	}
 	for j := lr.instance_starts[i]; j < lr.instance_starts[i+1]; j++ {
 		index := lr.indices[j]
 		vec[index] += mult * lr.values[j]
@@ -153,8 +153,9 @@ func (obj *LogisticRegressionObjective) Eval(input, gradient []float32) float32 
 	}
 	for i := 0; i < obj.lr.NumInstances(); i++ {
 		score := obj.lr.ScoreOf(i, input)
-		//var insLoss, insProb float32
-		/*if score < -30 {
+
+		var insLoss, insProb float32
+		if score < -30 {
 			insLoss = -score
 			insProb = 0
 		} else if score > 30 {
@@ -164,10 +165,10 @@ func (obj *LogisticRegressionObjective) Eval(input, gradient []float32) float32 
 			temp := 1.0 + math.Exp(float64(-score))
 			insLoss = float32(math.Log(temp))
 			insProb = 1.0 / float32(temp)
-		}*/
-		
-		//obj.lr.AddMultTo(i, 1.0-insProb, gradient)
-		temp:=1.0 + math.Exp(float64(-score))
+		}
+		loss += insLoss
+		obj.lr.AddMultTo(i, 1.0-insProb, gradient)
+		/*temp:=1.0 + math.Exp(float64(-score))
 		
 		hx := 1.0 / float32(temp)
 		if obj.lr.labels[i] {
@@ -176,7 +177,7 @@ func (obj *LogisticRegressionObjective) Eval(input, gradient []float32) float32 
 		}else{
 			loss += float32(-math.Log(1.0-float64(hx)))
 			obj.lr.AddMultTo(i, hx, gradient)
-		}
+		}*/
 		
 	}
 	return loss
