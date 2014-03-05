@@ -78,9 +78,7 @@ func (state *OptimizerState)GetValue() float32{
 
 func (state *OptimizerState) EvalL1() float32 {
 	var val float32
-	//fmt.Println("iter:",state.iter)
 	val = state.costf.Eval(state.newX, state.newGrad)
-	//fmt.Println("EvalL1_val:",val)
 	if state.l1weight > 0 {
 		for i := 0; i < state.dim; i++ {
 			val += abs(state.newX[i]) * state.l1weight
@@ -90,7 +88,6 @@ func (state *OptimizerState) EvalL1() float32 {
 	return val
 }
 func (state *OptimizerState) UpdateDir() {
-	//fmt.Println("state.iter:",state.iter)
 	state.MakeSteepestDescDir()
 	state.MapDirByInverseHessian()
 	state.FixDirSigns()
@@ -106,10 +103,8 @@ func (state *OptimizerState) UpdateDir() {
 func (state *OptimizerState) TestDirDeriv() {
 	dirNorm:=float32(math.Sqrt(float64(dotProduct(state.dir, state.dir))))
 	var eps float32 =1.05e-8 / dirNorm
-	//fmt.Println("eps:",eps)
 	state.GetNextPoint(eps)
 	val2:=state.EvalL1()
-	fmt.Println("val2,value,eps:",float64(val2),float64(state.value),eps)
 	numDeriv :=(val2 - state.value) / eps
 	deriv:=state.DirDeriv()
 	if !state.quiet {
@@ -167,7 +162,6 @@ func (state *OptimizerState) MakeSteepestDescDir() {
 			}
 
 		}
-		//fmt.Println("MakeSteepestDescDir dir:",state.dir," MakeSteepestDescDir state.grad:",state.grad)
 	}
 	DeepCopy(state.steepestDescDir,state.dir)
 }
@@ -181,7 +175,6 @@ func (state *OptimizerState) MapDirByInverseHessian() {
 	if lowerBound < 0 {
 		lowerBound = 0
 	}
-	//这部分有错
 	for i := state.iter - 1; i >= lowerBound; i-- {
 		currIndex := Mod(i, state.m)
 		state.alphas[currIndex] = -dotProduct(state.sList[currIndex], state.dir) / state.roList[currIndex]
@@ -199,13 +192,6 @@ func (state *OptimizerState) MapDirByInverseHessian() {
 		beta := dotProduct(state.yList[currIndex], state.dir)/state.roList[currIndex]
 		addMult(state.dir, state.sList[currIndex], -state.alphas[currIndex]-beta)
 	}
-	/*fmt.Println("lowerBound:",lowerBound)
-	fmt.Println("MapDirByInverseHessian dir:",state.dir)
-	fmt.Println("state.yList:",state.yList)
-	fmt.Println("state.sList:",state.sList)
-	fmt.Println("state.roList:",state.roList)
-	fmt.Println("state.alphas:",state.alphas)
-	fmt.Println("MapDirByInverseHessian state.dir state.grad:",state.dir,state.grad)*/
 }
 
 func (state *OptimizerState) FixDirSigns() {
@@ -265,7 +251,6 @@ func (state *OptimizerState) BackTrackingLineSearch() {
 	if state.iter == 0 {
 		var normDir float32 = float32(math.Sqrt(float64(dotProduct(state.dir, state.dir))))
 		alpha = 1 / normDir
-		//fmt.Println("alpha:",alpha)
 		backoff = 0.1
 	}
 	const c1 float32 = 0.0001
@@ -276,7 +261,6 @@ func (state *OptimizerState) BackTrackingLineSearch() {
 		state.value = state.EvalL1()
 
 		if state.value <= oldValue+c1*origDirDeriv*alpha {
-			//fmt.Println("k:",k)
 			break
 		}
 		alpha *= backoff
